@@ -1,0 +1,6 @@
+# 添加网卡
+sudo tc  qdisc  add  dev  lo  root  netem 
+# 改变网络延迟
+sudo tc  qdisc  change  dev  lo  root  netem  delay  0%
+# 改变丢包
+sudo tc  qdisc  change  dev  lo  root  netem  loss  0%

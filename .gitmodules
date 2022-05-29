@@ -1,0 +1,13 @@
+[submodule "Vender/glad"]
+	path = Vender/glad
+	url = git@github.com:Masarity/masal-glad.git
+[submodule "Vender/imgui"]
+	path = Vender/imgui
+	url = git@github.com:Masarity/imgui.git
+	branch = docking
+[submodule "Vender/glfw"]
+	path = Vender/glfw
+	url = git@github.com:Masarity/glfw.git
+[submodule "Vender/implot"]
+	path = Vender/implot
+	url = https://github.com/epezent/implot.git

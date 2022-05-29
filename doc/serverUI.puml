@@ -1,0 +1,49 @@
+@startuml
+!theme plain
+skinparam conditionStyle InsideDiamond
+|服务端界面|
+start
+while (服务端界面关闭?) is (no)
+fork
+    partition 创建服务端 #pink
+        if (点击tab栏创建服务端) then (yes)
+            : 弹出配置窗口;
+            : 输入协议类型、端口(默认使用127.0.0.1);
+            : 创建一个服务端线程; 
+            note right 
+                记为S
+            end note
+            : 将该线程添加到线程指针列表中;
+        else (no)
+        endif
+    }
+fork again
+    partition 选择服务端 #pink
+        if (点击服务端tab) then (yes)
+            : 显示相应的服务端界面;
+        else (no)
+        endif
+    }
+fork again
+    partition 关闭服务端 #pink
+        if (点击关闭按钮) then (yes)
+            : 关闭选中的服务端线程;
+            : 从线程列表中将其去除;
+        else (no)
+        endif
+    }
+end fork
+partition UI渲染 #pink
+    : 将线程列表中的服务端显示在侧边栏中（ip地址、协议、端口）;
+    : 在主窗口中显示当前服务端的主界面;
+    : 将状态信息队列中的信息打印到状态框;
+    : 将接收信息队列中的信息打印到消息框;
+}
+end while (yes)
+if (服务端线程列表为空?) then (yes)
+    : 直接退出;
+else (no)
+    : 将所有线程关闭;
+endif
+stop
+@enduml

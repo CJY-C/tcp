@@ -1,0 +1,49 @@
+@startmindmap
+!theme plain
+* tcp模拟
+++ 两个进程
++++ 服务器进程
++++ 客户端进程
+++ UI
++++ 传输消息交互
+++++ 将输入数据分解尽可能多的包进行发送\n(可以更好的演示)
++++ 服务器&客户端Log窗口
++++ 网络状态可视化
+++++ 网络延时条线图
+++++ 网络稳定性条线图
+++++ 网络丢包饼图
+++ netem 命令
++++ linux下模拟网络问题
+++++ 延时
+++++ 丢包-定义是什么？？
+++++_ ...
+
+* 类
+++ TcpNode
++++ domain——协议族
++++ type——协议类型
++++ protocol——协议编号
++++ Init()
++++ Send()
++++ Receive()
++++ Close()
+++ Server
++++ hostname
++++ port
++++ listening
++++ Init(Network)
++++ Listening()
++++ Shutdown()
+++ Client
++++ serverAddr
++++ port
++++ running
++++ Init(Network)
++++ Send(消息)
++++ Shutdown()
+++ Message
++++ 先不管
+++ Status
++++ 先不管
+
+@endmindmap
