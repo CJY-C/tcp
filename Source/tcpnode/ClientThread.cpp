@@ -97,7 +97,7 @@ void ClientThread::UIRenderer(bool *open)
 
     if (ImGui::BeginTabItem(Name.c_str(), open, ImGuiTabItemFlags_None))
     {
-        char msg[10] = {0};
+        char msg[1024] = {0};
         ImGui::SetCursorPosX(80);
         if(ImGui::InputTextWithHint("##msg", m_msg.c_str(), msg, sizeof(msg)))
         {
