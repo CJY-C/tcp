@@ -16,13 +16,6 @@ fork
         endif
     }
 fork again
-    partition 选择客户端 #pink
-        if (点击客户端tab) then (yes)
-            : 显示相应的客户端界面;
-        else (no)
-        endif
-    }
-fork again
     partition 关闭客户端 #pink
     if (点击关闭按钮) then (yes)
             : 关闭选中的客户端线程;
@@ -34,15 +27,15 @@ fork again
     partition 连接到服务端 #pink
         if (点击连接按钮) then (yes)
             : 弹出配置窗口;
-            : 输入服务端IP地址、端口号以及协议;
-            : 触发连接事件;
+            : 输入服务端IP地址、端口号;
+            : 连接到服务端;
         else (no)
         endif
     }
 fork again 
-    partition 向服务端发送消息 #pink
-        if  (正在发送消息) then (no)
+    partition 发送消息 #pink
         : 输入待发送的消息;
+        if  (正在发送消息) then (no)
             if (点击发送按钮) then (yes)
                 : 触发消息发送事件;
             else (no)
@@ -51,10 +44,10 @@ fork again
         endif
     }
 fork again 
-    partition 与服务器断开连接 #pink
+    partition 断开连接 #pink
         if (已连接到服务器) then (yes)
             if (点击断开连接) then (yes)
-                : 触发断开连接事件;
+                : 与服务端断开连接;
             else (no)
             endif
         else (no)
@@ -62,14 +55,10 @@ fork again
     }
 end fork
 partition UI渲染 #pink
-    : 将线程列表中的客户端显示在侧边栏中;
-    : 在主窗口中显示当前客户端的主界面;
-    : 将状态信息队列中的信息打印到状态框;
-    : 将接收信息队列中的信息打印到消息框;
+    : 显示当前选中的客户端的主界面;
 }
 end while (yes)
-if (客户端线程列表为空?) then (yes)
-    : 直接退出;
+if (客户端线程列表为空？) then (yes)
 else (no)
     : 将所有线程关闭;
 endif

@@ -1,4 +1,11 @@
 build/
 bin/
 paper/
+pic/
+doygen/
+doxygen/
 .cache/
+
+GPATH
+GRTAGS
+GTAGS

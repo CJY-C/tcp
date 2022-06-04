@@ -4,29 +4,28 @@ skinparam conditionStyle InsideDiamond
 |服务端线程|
 /' start '/
 (S)
-:创建soket;
+:创建套接字;
+:绑定端口;
 :开始监听;
 : 将服务端socket注册到事件监听列表中;
 repeat 
     : 阻塞一段时间(500ms)，更新监听列表中的事件;
-    while (所有事件处理结束?) is (no)
-        if (发生事件的socekt为服务端socket) then (yes)
+    while (所有事件处理结束？) is (no)
+        if (服务端套接字事件？) then (yes)
             partition 处理连接事件 #lightblue
-            : 与客户端建立连接;
-            : 将连接状态存入状态信息队列中;
-            : 将返回的客户端socket注册到事件监听列表中;
+            : 接受客户端的连接;
+            : 接受客户端的消息（获取名称）;
+            : 将该客户端存入map中;
+            : 将该客户端注册到事件监听列表中;
         }
         else (no)
             partition 处理消息接收事件 #lightblue
-            : 与客户端建立连接;
             : 创建一个新的客户端对象;
             : 接收客户端传来的消息;
-            if (消息是否为FIN) then (no)
-                : 将接受消息存入接收信息队列中;
+            if (是否产生断连异常) then (no)
                 : 向客户端发送响应;
-                : 将相应存入状态信息队列中;
             else (yes)
-                : 将该客户端socket从注册的事件监听列表中删除;
+                : 将该客户端从事件监听列表以及map中删除;
             endif
         }
         endif

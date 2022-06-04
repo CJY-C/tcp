@@ -2,12 +2,13 @@
 !theme plain
 !include ./design.puml
 
-TcpNode ..> NetworkPros
+TCPNode .> NetworkPros
+TCPThread .> Message
 
-ServerNode -|> TcpNode
-ClientNode --|> TcpNode
+ServerNode -|> TCPNode
+ClientNode --|> TCPNode
 
-ServerThread -|> Thread
-ClientThread --|> Thread
+ServerThread -|> TCPThread
+ClientThread --|> TCPThread
 
 @enduml

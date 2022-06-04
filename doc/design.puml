@@ -9,145 +9,111 @@ class NetworkPros #white{
     + {static}Protocol: int
 }
 
-abstract class TcpNode #white{
+abstract class TCPNode #white{
     .. attributes ..
-    + m_Name: string
+    + Name: string
+    + ErrerInfo: char[256]
     + Socket: int
     + IP: string
     + Port: unsigned short
     .. marks ..
-    - m_Running: bool
-    .. message queue ..
-    + m_StatusQueue: queue
-    + m_MessageQueue: queue
+    + Running: bool
     ----
-    + TcpNode(name)
-    + {abstract}~TcpNode()
+    + TCPNode(name)
+    + {abstract}~TCPNode()
     .. server and client ..
     + int CreateSocket()
-    + bool Running();
     + void Close()
+    + bool SetBlock(isBlock)
     + {abstract}int Send(buf, bufSize)
     + {abstract}int Recv(buf, bufSize)
     .. server only ..
     + {abstract}bool Bind(port)
-    + {abstract}TcpNode Accept()
+    + {abstract}bool Listen(number)
+    + {abstract}TCPNode Accept()
     .. client only ..
     + {abstract}bool Connect()
     + {abstract}bool Disconnect()
-    + {abstract}{abstract}bool TriggerConnect(ip, port)
-    + {abstract}{abstract}bool TriggerDisconnect()
-    + {abstract}bool TriggerSend(msg)
-    + {abstract}bitset GetActiveEvent()
-    + {abstract}bool Sending()
-}
-
-abstract class Thread #white{
-    - m_TcpNode: TcpNode*
-    - m_Thread: thread
-    .. UI ..
-    - m_StatusLog: ImLog
-    - m_MessageLog: ImLog
-    + m_StatusInfo: string
-    ----
-    + Thread(id)
-    + {abstract}~Thread()
-    .. tcp node thread ..
-    + {abstract}void Main()
-    .. UI thread ..
-    + {abstract}void UIRenderer()
 }
 
 class ClientNode #white{
     .. server info ..
     - m_ServerIP: string
     - m_ServerPort: unsigned short
-    .. marks ..
-    - m_ActiveEvent: bitset
     ----
     + ClientNode(name)
     + ~ClientNode()
     .. override ..
-    + bool TriggerConnect(ip, port)
-    + bool TriggerDisconnect()
-    + bool TriggerSend(msg)
-    + bitset GetActiveEvent()
-    + bool Sending()
+    + bool Connect()
+    + bool Disconnect()
 }
-note right of ClientNode
-    one-hot 事件编码
-end note
-
 
 class ServerNode #white{
     + ServerNode(name)
     + ~ServerNode()
+    ..override..
+    + bool Bind(port)
+    + bool Listen(number)
+    + TCPNode Accept()
 }
+
+abstract class TCPThread #white{
+    ..atttibutes..
+    + Name: string
+    + tcpNode: TCPNode*
+    - m_Thread: thread
+    .. UI ..
+    + m_StatusLog: ImLog
+    + m_MessageLog: ImLog
+    + m_StatusInfo: string
+    ----
+    + TCPThread(name)
+    + {abstract}~TCPThread()
+    .. override ..
+    + {abstract}void Main()
+    + {abstract}void UIRenderer(open)
+}
+
 class ClientThread #white{
-    + ClientThread(id)
+    ..attributes..
+    - m_msg: string
+    ----
+    + ClientThread(name)
     + ~ClientThread()
     .. override ..
     + void Main()
-    + void UIRenderer()
+    + void UIRenderer(open)
     
 }
 class ServerThread #white{
-    + ServerThread(id)
+    ..attributes..
+    - m_ConnectedClients: map
+    ----
+    + ServerThread(name)
     + ~ServerThread()
     .. override ..
     + void Main()
-    + void UIRenderer()
+    + void UIRenderer(open)
 }
 
 
-/' abstract class Node #white{ '/
-/' # m_Nodefd: int '/
-/' # m_Running: bool '/
-/' + int GetNodefd() '/
-/' # {abstract}void Init() '/
-/' # {abstract}void Close() '/
-/' } '/
-/' class Server #white{ '/
-/'     ..identifier.. '/
-/'     + HostName: string '/  
-/'     + Port: uint16_t '/
-/'     ..marks.. '/
-/'     - m_Listening: bool '/
-/'     ..threads.. '/
-/'     - m_ListeningThread: thread '/
-/'     ..fd.. '/
-/'     - m_Listenfd: int '/
-/'     - m_Clientfd: int '/
-/'     ---- '/
-/'     ..main.. '/
-/'     + Start() '/
-/'     - void Init(Network&) '/
-/'     - void Listening() '/
-/'     - void Shutdown() '/
-/' } '/
-/' class Client #white{ '/
-/'     ..marks.. '/
-/'     - m_Sending: bool '/
-/'     - m_Running: bool '/
-/'     ..threads.. '/
-/'     - m_SendingThread: thread '/
-/'     - m_ConnectingThread: thread '/
-/'     ..fd.. '/
-/'     - m_Sockfd: int '/
-/'     ---- '/
-/'     ..main.. '/
-/'     + void Send(Server*, string&) '/
-/'     - void Init(Network&) '/
-/'     - void Connect(Server*) '/
-/'     - queque<Messsage> Processing(string&) '/
-/'     - void Shutdown() '/
-/' } '/
-/' class Random #white{ '/
-/'     + static int randomIntNumber(begin, end) '/
-/'     + static bool randomTrigger(probability) '/
-/' } '/
-/' class Message #white{ '/
-/' } '/
-/' class Status #white{ '/
-/' } '/
+class Message #white{
+    ..attributes..
+    + Data: bitset
+    + Code: enum
+    ----
+    ..operator overload..
+    + bool operator/(binary) 
+    + Message& operator>>(bits) 
+    + Message& operator<<(bits) 
+    + Message& operator^(msg) 
+    + Message& operator^(binary)
+    ..static function..
+    + {static}int GetLength(binary)
+    + {static}void StringToBits(msg, binary)
+    + {static}string BitsToString(binary)
+    + {static}void Encode(msg)
+    + {static}bool Decode(msg)
+}
+
 @enduml

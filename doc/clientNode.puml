@@ -4,36 +4,31 @@ skinparam conditionStyle InsideDiamond
 |客户端|
 /' start '/
 (C)
-:创建soket;
+:创建套接字;
 repeat
-fork
-    partition <b>连接服务端 #lightblue
-        if (连接事件) then (yes)
-            : 根据输入的ip地址、端口号, 以及选择的协议, 连接到服务器;
-            : 将连接结果存入状态信息队列;
-            : 取消连接事件;
-        else (no)
-        endif
-    }
-fork again
+/' fork '/
+/'     partition <b>连接服务端 #lightblue '/
+/'         if (连接事件) then (yes) '/
+/'             : 根据输入参数，连接到服务器; '/
+/'         else (no) '/
+/'         endif '/
+/'     } '/
+/' fork again '/
     partition <b>发送消息 #lightblue
         if (发送消息事件) then (yse)
-            : 发送消息，并保存到状态信息队列;
-            : 阻塞，接收服务端的回应,保存到接收信息队列;
-            : 取消消息发送事件;
+            : 发送消息;
+            : 接收服务端的回应;
         else (no)
         endif
     }
-fork again
-    partition <b>断开连接 #lightblue
-        if  (断开连接事件) then (yes)
-            : 主动断开与服务端的连接;
-            : 将断开连接结果存入状态消息队列;
-            : 取消断开连接事件;
-        else (no)
-        endif
-    }
-end fork
+/' fork again '/
+/'     partition <b>断开连接 #lightblue '/
+/'         if  (断开连接事件) then (yes) '/
+/'             : 断开与服务端的连接; '/
+/'         else (no) '/
+/'         endif '/
+/'     } '/
+/' end fork '/
 repeat while (客户端关闭?)
 : 关闭客户端;
 : 释放资源;

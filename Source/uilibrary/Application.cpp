@@ -77,7 +77,7 @@ void Application::Init()
     std::string fontPath = RESOURCE_ROOT;
     fontPath.append("/Fonts/Noto_Sans_SC/NotoSansSC-Thin.otf");
     // font
-    io.FontDefault = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 30.f, nullptr, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+    io.FontDefault = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 30.f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
     // Merge icons into default tool font
     /* ImGuiIO& io = ImGui::GetIO(); */
