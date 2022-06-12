@@ -54,6 +54,11 @@ private:
       */
     void MonitorRetrans();
 
+    /**
+      * @brief  接收数据
+      */
+    void ReceiveMessage();
+
 private:
     /* attributes */
     unsigned short port = 0; /**< 记录上次输入的端口号 */

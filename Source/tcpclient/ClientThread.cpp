@@ -45,7 +45,6 @@ void ClientThread::Main()
     Node = new ClientNode();
     Node->CreateSocket();
     Node->Running = true;
-
     StatusInfo = "正常运行-未连接";
 
     /* 监控是否进行丢包重发的线程 */
@@ -66,28 +65,12 @@ void ClientThread::Main()
         {
             m_Event = m_Events[i];
 
-            /* 收数据 */
-            char recvBuf[1024] = {0};
-            if (Node->Recv(recvBuf, sizeof(recvBuf)))
-            {
-                if (!strcmp(recvBuf, "close"))
-                {
-                    PRINT_TO_LOG(Status, "服务端[%d] %s", 
-                            port, "断开连接！");
-                    StatusInfo = "正常运行-未连接";
-                    m_Connected = false;
-                }
-                else
-                PRINT_TO_MSG(Message, "%s", recvBuf);
-                /* PRINT_TO_MSG(Message, "< %d " ICON_FK_COMMENTING " > %s", */ 
-                /*         port, recvBuf); */
-            }
+            ReceiveMessage(); /* 接收发来的消息 */
         }
     }
 
     m_Connected = false;
-    Node->Close();
-    delete Node;
+
 }
 
 void ClientThread::UIRenderer(bool *open)
@@ -152,12 +135,10 @@ void ClientThread::ConnectingServerUI()
                 m_Connected = false;
                 StatusInfo = "正常运行-未连接";
             }
-            ImGui::CloseCurrentPopup(); 
         }, 
         // cancel
         [&](){
             m_ConfigServer = false;
-            ImGui::CloseCurrentPopup(); 
         });
 
         ImGui::EndPopup();
@@ -257,6 +238,23 @@ void ClientThread::MonitorRetrans()
                 lastRetrans = currentRetrans;
             }
         }
+    }
+}
+
+void ClientThread::ReceiveMessage()
+{
+    char recvBuf[1024] = {0};
+    if (Node->Recv(recvBuf, sizeof(recvBuf)))
+    {
+        if (!strcmp(recvBuf, "close"))
+        {
+            PRINT_TO_LOG(Status, "服务端[%d] %s", 
+                    port, "断开连接！");
+            StatusInfo = "正常运行-未连接";
+            m_Connected = false;
+        }
+        else
+        PRINT_TO_MSG(Message, "%s", recvBuf);
     }
 }
 

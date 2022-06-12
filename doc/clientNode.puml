@@ -5,30 +5,20 @@ skinparam conditionStyle InsideDiamond
 /' start '/
 (C)
 :创建套接字;
+:开启一个监听重发次数的线程;
+:将客户端socket注册到事件监听列表中;
 repeat
-/' fork '/
-/'     partition <b>连接服务端 #lightblue '/
-/'         if (连接事件) then (yes) '/
-/'             : 根据输入参数，连接到服务器; '/
-/'         else (no) '/
-/'         endif '/
-/'     } '/
-/' fork again '/
-    partition <b>发送消息 #lightblue
-        if (发送消息事件) then (yse)
-            : 发送消息;
-            : 接收服务端的回应;
-        else (no)
-        endif
-    }
-/' fork again '/
-/'     partition <b>断开连接 #lightblue '/
-/'         if  (断开连接事件) then (yes) '/
-/'             : 断开与服务端的连接; '/
-/'         else (no) '/
-/'         endif '/
-/'     } '/
-/' end fork '/
+    : 阻塞一段时间(200ms)，更新监听列表中的事件;
+    while (所有事件处理结束？) is (no)
+        partition 消息处理 #lightblue
+            : 接受服务端发来的消息;
+            if (消息是否为close？) then (yes)
+                : 断开连接;
+            else (no)
+                : 显示消息;
+            endif
+        }
+    end while (yes)
 repeat while (客户端关闭?)
 : 关闭客户端;
 : 释放资源;

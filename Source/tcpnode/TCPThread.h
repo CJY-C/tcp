@@ -37,6 +37,9 @@ public:
       */
     virtual ~TCPThread()
     {
+        Node->Close();
+        if (Node)
+            delete Node;
         m_TCPThread.join();
     }
 

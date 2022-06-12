@@ -2,7 +2,6 @@
  * @file ClientNode.h
  * @brief 客户端节点
  * @details 实现接口Connect、Disconnect，重载Send
- * @todo 错误信息保存
  */
 #pragma once
 

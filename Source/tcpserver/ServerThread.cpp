@@ -94,12 +94,6 @@ ServerThread::~ServerThread()
 {
     for (auto& client : m_ConnectedClients) 
         client.second.Send("close", 6);
-
-    Node->Close();
-    delete Node;
-    //TODO: debug
-    /* Node = nullptr; */
-
 }
 
 void ServerThread::ServerEvent()
@@ -119,7 +113,8 @@ void ServerThread::ServerEvent()
         m_ConnectedClients.insert(std::make_pair(client.Socket, client));
 
         char recv[1024] = {0};
-        sprintf(recv, "\t\t\t\t\t\t\t\t" ICON_FK_BELL "\t\t[%s]\t进入聊天室", client.Name.c_str());
+        sprintf(recv, "\t\t\t\t\t\t\t" ICON_FK_BELL "\t\t[%s]\t进入[%d]聊天室",
+                client.Name.c_str(), Node->Port);
         for (auto& c : m_ConnectedClients) 
             c.second.Send(recv, strlen(recv) + 1);
 
@@ -140,11 +135,13 @@ void ServerThread::ClientEvent()
                 client.Name.c_str(), client.IP.c_str());
 
         char recv[1024] = {0};
-        sprintf(recv, "\t\t\t\t\t\t\t\t" ICON_FK_BELL "\t\t[%s]\t离开聊天室", client.Name.c_str());
+        sprintf(recv, "\t\t\t\t\t\t\t" ICON_FK_BELL "\t\t[%s]\t离开[%d]聊天室", 
+                client.Name.c_str(), Node->Port);
         for (auto& c : m_ConnectedClients) 
             c.second.Send(recv, strlen(recv) + 1);
 
         m_ConnectedClients.erase(m_Event.data.fd);
+
         epoll_ctl(m_epfd, EPOLL_CTL_DEL, client.Socket, &m_Event);
     }
     else
@@ -156,6 +153,7 @@ void ServerThread::ClientEvent()
                     client.Name.c_str(), Message::BitsToString(msg.Data).c_str());
 
             PRINT_TO_MSG(Message, "%s[校验通过]", recv);
+
             for (auto& c : m_ConnectedClients) 
                 c.second.Send(recv, strlen(recv) + 1);
         }

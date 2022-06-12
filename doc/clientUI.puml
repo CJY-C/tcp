@@ -37,7 +37,7 @@ fork again
         : 输入待发送的消息;
         if  (正在发送消息) then (no)
             if (点击发送按钮) then (yes)
-                : 触发消息发送事件;
+                : 发送消息;
             else (no)
             endif
         else (yes)

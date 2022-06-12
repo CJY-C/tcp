@@ -17,7 +17,7 @@ include_directories(
     ${IMPLOT_INC_DIR}
 )
 
-set(TEST_FILE "${PROJECT_SRC_ROOT}/main.cpp")
+# set(TEST_FILE "${PROJECT_SRC_ROOT}/main.cpp")
 
 file(GLOB PROJECT_FILES_HEADER 
     "${PROJECT_SRC_ROOT}/*.h"
@@ -46,10 +46,10 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     RESOURCE_ROOT="${RESOURCE_ROOT}" 
 )
 
-add_executable("${PROJECT_NAME}_test"
-    ${TEST_FILE}
-)
+# add_executable("${PROJECT_NAME}_test"
+#     ${TEST_FILE}
+# )
 
-target_link_libraries("${PROJECT_NAME}_test"
-    ui
-)
+# target_link_libraries("${PROJECT_NAME}_test"
+#     ui
+# )

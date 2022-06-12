@@ -116,6 +116,7 @@ void Application::Run(void(*func)())
 
         // UI
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
         func();
 
         // Rendering
